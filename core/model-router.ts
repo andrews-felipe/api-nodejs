@@ -10,7 +10,7 @@ import { environments } from './environments';
 
 export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
-    pageSize : number = 5
+    pageSize: number = 5
 
     constructor(protected model: mongoose.Model<D>) {
         super()
@@ -37,41 +37,41 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
      */
     findTasksByDreamCode = (req, resp, next) => {
         this.model.findOne({ code: req.params.code }, "+tasks")
-                  .then((result : any)=>{
-                        result = result.tasks
-                        resp.json(result)
-                        return next()
-                    }).catch(next)
+            .then((result: any) => {
+                result = result.tasks
+                resp.json(result)
+                return next()
+            }).catch(next)
     }
     /**
      * Altera a lista de tasks
      */
     changeTaskList = (req, resp, next) => {
-        this.model.findById(req.params.id).then((list : any)=>{
-            if(!list){
+        this.model.findById(req.params.id).then((list: any) => {
+            if (!list) {
                 throw new NotFoundError('Sonho não encontrado')
-            }else{
+            } else {
                 list.tasks = req.body
                 return list.save()
             }
-        }).then(this.render(resp, next))    
-          .catch(next)
+        }).then(this.render(resp, next))
+            .catch(next)
     }
     /**
      * Retorna todos os objetos da rota
      */
     findAll = (req, resp, next) => {
+        // paginação
         let page = parseInt(req.query._page || 1)
         page = page > 0 ? page : 1
         const skip = (page - 1) * this.pageSize
-        this.model.count({}).exec().then(count=>{
+
+        this.model.count({}).exec().then(count => {
             this.model.find()
-            .skip(skip)
-            .limit(this.pageSize)
-            .then(this.render(resp, next, {
-                page, count, pageSize : this.pageSize
-            }))})
-            .catch(next)
+                .skip(skip)
+                .limit(this.pageSize)
+                .then(this.render(resp, next, { page, count, pageSize: this.pageSize }))
+        }).catch(next)
     }
     /**
      * Retorna o objeto pelo código referenciado

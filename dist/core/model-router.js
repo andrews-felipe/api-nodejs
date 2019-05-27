@@ -61,6 +61,7 @@ class ModelRouter extends router_1.Router {
          * Retorna todos os objetos da rota
          */
         this.findAll = (req, resp, next) => {
+            // paginação
             let page = parseInt(req.query._page || 1);
             page = page > 0 ? page : 1;
             const skip = (page - 1) * this.pageSize;
@@ -68,11 +69,8 @@ class ModelRouter extends router_1.Router {
                 this.model.find()
                     .skip(skip)
                     .limit(this.pageSize)
-                    .then(this.render(resp, next, {
-                    page, count, pageSize: this.pageSize
-                }));
-            })
-                .catch(next);
+                    .then(this.render(resp, next, { page, count, pageSize: this.pageSize }));
+            }).catch(next);
         };
         /**
          * Retorna o objeto pelo código referenciado
