@@ -42,7 +42,6 @@ const updateMiddleware = function (next) {
     }
 }
 
-
 usersSchema.pre('save', saveMiddleware)
 usersSchema.pre('findOneAndUpdate', updateMiddleware)
 usersSchema.pre('update', updateMiddleware)

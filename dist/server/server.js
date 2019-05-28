@@ -4,6 +4,7 @@ const restify = require("restify");
 const mongoose = require("mongoose");
 const environments_1 = require("../core/environments");
 const error_handle_1 = require("./error.handle");
+const token_parser_1 = require("./../security/token.parser");
 class Server {
     initializeDb() {
         mongoose.Promise = global.Promise;
@@ -20,6 +21,7 @@ class Server {
                 });
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
+                this.application.use(token_parser_1.validateRequestWithToken);
                 for (let router of routers) {
                     router.applyRoutes(this.application);
                 }

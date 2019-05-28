@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose'
 import { environments } from '../core/environments';
 import { Router } from '../core/router';
 import { handleError } from './error.handle';
+import { validateRequestWithToken } from './../security/token.parser'
 
 
 export class Server {
@@ -25,6 +26,7 @@ export class Server {
                 })
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
+                this.application.use(validateRequestWithToken)
 
                 for (let router of routers) {
                     router.applyRoutes(this.application)

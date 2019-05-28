@@ -1,8 +1,7 @@
-import { Router } from "../../core/router";
 import * as restify from 'restify'
-import { NotFoundError } from "restify-errors";
 import { User } from "./users.model";
 import { ModelRouter } from "../../core/model-router";
+import { authenticate } from "../../security/auth.handler";
 
 class UserRouter extends ModelRouter<User> {
 
@@ -17,6 +16,8 @@ class UserRouter extends ModelRouter<User> {
         app.post('/users', this.save)
         app.put('/users/:id', [this.validateId, this.update])
         app.del('/users/:id', [this.validateId, this.delete])
+    
+        app.post('/auth', authenticate)
     }
 }
 export const usersRouter = new UserRouter()
