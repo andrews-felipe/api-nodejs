@@ -4,5 +4,5 @@
 
 - npm i -g nodemon
 - npm i 
-- nodemon index.js
+- nodemon dist/main.js
 - API ON IN PORT 3000
