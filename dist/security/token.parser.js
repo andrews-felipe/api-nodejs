@@ -13,15 +13,16 @@ exports.validateRequestWithToken = (req, resp, next) => {
     }
 };
 function extractToken(req) {
+    let token = undefined;
     const authorization = req.header('authorization');
-    // Quebrando o token
+    // quebrando o token
     if (authorization) {
         const parts = authorization.split(' ');
         if (parts.length === 2 && parts[0] === 'Bearer') {
-            return parts[1];
+            token = parts[1];
         }
-        return undefined;
     }
+    return token;
 }
 /**
  *

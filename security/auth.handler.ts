@@ -17,7 +17,7 @@ export const authenticate: restify.RequestHandler = (req, resp, next) => {
     findByEmail(email).then(user => {
 
         if (user && comparePassword(password, user.password)) {
-
+                
             const token = jwt.sign({ sub: user.email, iss: 'dream-api' }, environments.SECRET_KEY_TOKEN)
             resp.json({
                 name: user.firstName,

@@ -8,6 +8,7 @@ export interface Dream extends mongoose.Document{
 }
 
 const dreamSchema = new mongoose.Schema({
+    idUser : {type : String, required : true, select : false},
     title : { type : String, required : true },
     code : { type : Number },
     tasks : { type : [taskSchema] , required : false, select : false}

@@ -14,16 +14,16 @@ export const validateRequestWithToken: restify.RequestHandler = (req, resp, next
 }
 
 function extractToken(req: restify.Request) {
+    let token = undefined
     const authorization = req.header('authorization')
-    // Quebrando o token
+    // quebrando o token
     if (authorization) {
         const parts: string[] = authorization.split(' ')
         if (parts.length === 2 && parts[0] === 'Bearer') {
-            return parts[1]
+            token = parts[1]
         }
-        return undefined
-
     }
+    return token
 }
 
 /**

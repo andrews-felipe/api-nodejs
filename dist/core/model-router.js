@@ -73,6 +73,21 @@ class ModelRouter extends router_1.Router {
             }).catch(next);
         };
         /**
+         * Retorna todos os objetos da rota
+         */
+        this.findAllofUser = (req, resp, next) => {
+            // paginação
+            let page = parseInt(req.query._page || 1);
+            page = page > 0 ? page : 1;
+            const skip = (page - 1) * this.pageSize;
+            this.model.count({}).exec().then(count => {
+                this.model.find({ idUser: req.authenticated._id })
+                    .skip(skip)
+                    .limit(this.pageSize)
+                    .then(this.render(resp, next, { page, count, pageSize: this.pageSize }));
+            }).catch(next);
+        };
+        /**
          * Retorna o objeto pelo código referenciado
          */
         this.findByCode = (req, resp, next) => {
@@ -92,6 +107,10 @@ class ModelRouter extends router_1.Router {
          * Salva o dado no banco, de acordo com a rota.
          */
         this.save = (req, resp, next) => {
+            // adicionando o id do usuário
+            if (req.authenticated) {
+                req.body.idUser = req.authenticated._id;
+            }
             let document = new this.model(req.body);
             document.save()
                 .then(this.render(resp, next))

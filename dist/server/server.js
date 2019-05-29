@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const restify = require("restify");
 const mongoose = require("mongoose");
+const corsMiddleware = require("restify-cors-middleware");
 const environments_1 = require("../core/environments");
 const error_handle_1 = require("./error.handle");
 const token_parser_1 = require("./../security/token.parser");
@@ -19,6 +20,15 @@ class Server {
                     name: 'dream-api',
                     version: '1.0.0'
                 });
+                const corsOptions = ({
+                    preflightMaxAge: 10,
+                    origins: ['*'],
+                    allowHeaders: ['authorization'],
+                    exposeHeaders: ['x-custom-header']
+                });
+                const cors = corsMiddleware(corsOptions);
+                this.application.pre(cors.preflight);
+                this.application.use(cors.actual);
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
                 this.application.use(token_parser_1.validateRequestWithToken);
